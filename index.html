@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steam ID Converter</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    input,
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input {
+      background-color: #fafafa;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: left;
+      color: #333;
+    }
+
+    .result p {
+      background-color: #f8f9fa;
+      padding: 12px;
+      border-radius: 5px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+    }
+
+    .result p strong {
+      color: #007bff;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      input,
+      button {
+        font-size: 14px;
+      }
+
+      .result p {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      input,
+      button {
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      .result p {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Steam ID Converter</h2>
+    <input type="text" id="steamInput" placeholder="Enter SteamID64 or Hex (e.g., 76561199685111768 or 0x1234)">
+    <button onclick="convertSteamID()">Convert</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function convertSteamID() {
+      const input = document.getElementById('steamInput').value.trim();
+      const resultDiv = document.getElementById('result');
+      let accountID;
+
+      if (/^0x[0-9a-fA-F]+$/.test(input)) {
+        accountID = BigInt(parseInt(input, 16));
+      } else if (/^\d{17}$/.test(input)) {
+        accountID = BigInt(input) - 76561197960265728n;
+      } else {
+        resultDiv.innerHTML = '<p style="color:red;">Please enter a valid 17-digit SteamID64 or hexadecimal ID.</p>';
+        return;
+      }
+
+      const y = accountID % 2n;
+      const z = accountID / 2n;
+      const steamLegacy = `STEAM_0:${y}:${z}`;
+      const steamID3 = `[U:1:${accountID}]`;
+      const steamID64 = (76561197960265728n + accountID).toString();
+      const hexID = '0x' + accountID.toString(16).toUpperCase();
+
+      resultDiv.innerHTML = `
+                <p><strong>Decimal Account ID:</strong> ${accountID}</p>
+                <p><strong>Hexadecimal ID:</strong> ${hexID}</p>
+                <p><strong>SteamID (Legacy):</strong> ${steamLegacy}</p>
+                <p><strong>SteamID3:</strong> ${steamID3}</p>
+                <p><strong>SteamID64:</strong> ${steamID64}</p>
+            `;
+    }
+  </script>
+</body>
+
+</html>
