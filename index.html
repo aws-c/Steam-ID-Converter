@@ -2,13 +2,19 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Convert your SteamID64 or Hex to different Steam ID formats such as SteamID (Legacy), SteamID3, and SteamID64.">
+  <meta name="author" content="Your Name or Website Name">
+  <meta name="keywords" content="Steam ID, Steam ID Converter, SteamID64, Steam ID Generator, Steam ID Legacy, SteamID3">
+  <meta property="og:title" content="Steam ID Converter">
+  <meta property="og:description" content="Easily convert SteamID64 or Hex into various Steam ID formats with this simple tool.">
+  <meta property="og:image" content="URL_to_your_image">
+  <meta property="og:url" content="URL_to_your_site">
   <title>Steam ID Converter</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #f3f4f6;
+      background-color: #f8f9fa;
       margin: 0;
       display: flex;
       justify-content: center;
@@ -78,6 +84,18 @@
       color: #007bff;
     }
 
+    .profile-link a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .profile-link a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 20px;
@@ -122,15 +140,17 @@
 <body>
   <div class="container">
     <h2>Steam ID Converter</h2>
-    <input type="text" id="steamInput" placeholder="Enter SteamID64 or Hex (e.g., 76561199685111768 or 0x1234)">
+    <input type="text" id="steamInput" placeholder="Enter SteamID64 or Hex (e.g., 76561199685111768 or 0x66CF0FD8)">
     <button onclick="convertSteamID()">Convert</button>
     <div class="result" id="result"></div>
+    <div class="profile-link" id="profileLink"></div>
   </div>
 
   <script>
     function convertSteamID() {
       const input = document.getElementById('steamInput').value.trim();
       const resultDiv = document.getElementById('result');
+      const profileLinkDiv = document.getElementById('profileLink');
       let accountID;
 
       if (/^0x[0-9a-fA-F]+$/.test(input)) {
@@ -139,6 +159,7 @@
         accountID = BigInt(input) - 76561197960265728n;
       } else {
         resultDiv.innerHTML = '<p style="color:red;">Please enter a valid 17-digit SteamID64 or hexadecimal ID.</p>';
+        profileLinkDiv.innerHTML = '';
         return;
       }
 
@@ -156,6 +177,10 @@
                 <p><strong>SteamID3:</strong> ${steamID3}</p>
                 <p><strong>SteamID64:</strong> ${steamID64}</p>
             `;
+      
+      profileLinkDiv.innerHTML = `
+        <p><strong>Steam Profile:</strong> <a href="https://steamcommunity.com/profiles/${steamID64}" target="_blank">https://steamcommunity.com/profiles/${steamID64}</a></p>
+      `;
     }
   </script>
 </body>
